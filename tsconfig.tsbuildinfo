@@ -1,1 +1,1 @@
-{"root":["./src/index.tsx","./src/components/index.tsx","./src/components/login/index.tsx","./src/components/login/login.components.tsx","./src/components/login/login.web-component.tsx"],"version":"5.6.3"}
+{"root":["./src/index.tsx","./src/components/index.tsx","./src/components/login/formik.tsx","./src/components/login/index.tsx","./src/components/login/login.components.tsx","./src/components/login/login.web-component.tsx"],"version":"5.6.3"}
