@@ -1,0 +1,1 @@
+export {LoginWebComponent as CustomLogin} from './login.web-component';
