@@ -7,7 +7,10 @@ class LoginWebComponent extends HTMLElement {
   private root: Root | null;
   private buttonColor: string = "bg-blue-500";
   private buttonSize: string = "px-6 py-3";
-  private formField:FormField[]=[];
+  private formField: FormField[] = [];
+  private formName: string = "Login";
+  private buttonName: string = "Login";
+  private buttonPosition: string = "";
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
@@ -18,47 +21,79 @@ class LoginWebComponent extends HTMLElement {
     this.shadowRoot?.appendChild(style);
     this.root = null;
   }
-  static get observedAttributes(){
-    return ['button-color', 'button-size','form-field'];
+  static get observedAttributes() {
+    return [
+      "button-color",
+      "button-size",
+      "form-field",
+      "form-name",
+      "button-name",
+      "button-position",
+    ];
   }
- 
 
-  attributeChangedCallback(name:string,oldValue:string,newValue:string){
-    if(oldValue!=newValue){
-      if(name==='button-size'){
-        this.buttonSize=newValue;
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (oldValue != newValue) {
+      if (name === "button-size") {
+        this.buttonSize = newValue;
       }
-      if(name==='button-color'){
-        this.buttonColor=newValue;
+      if (name === "button-color") {
+        this.buttonColor = newValue;
       }
-      if(name==='form-field'){
-        this.formField=JSON.parse(newValue);
+      if (name === "form-field") {
+        this.formField = JSON.parse(newValue);
+      }
+      if (name === "form-name") {
+        this.formName = newValue;
+      }
+      if (name === "button-name") {
+        this.buttonName = newValue;
+      }
+      if (name === "button-position") {
+        this.buttonPosition = newValue;
       }
     }
-    console.log('name=> ',name,'oldValue=> ',oldValue,'new Value=> ',newValue);
+    console.log(
+      "name=> ",
+      name,
+      "oldValue=> ",
+      oldValue,
+      "new Value=> ",
+      newValue
+    );
     this.render();
   }
-  connectedCallback(){
+  connectedCallback() {
     this.render();
   }
-  disconnectedCallback(){
-    if(this.root){
+  disconnectedCallback() {
+    if (this.root) {
       this.root.unmount();
     }
   }
-  private render(){
-    if(!this.root){
-      this.root=ReactDOM.createRoot(this.shadow!)
+  private render() {
+    if (!this.root) {
+      this.root = ReactDOM.createRoot(this.shadow!);
     }
-    console.log("button color=> ",this.buttonColor,"\n button size",this.buttonSize,"\n form field", this.formField);
+    console.log(
+      "button color=> ",
+      this.buttonColor,
+      "\n button size",
+      this.buttonSize,
+      "\n form field",
+      this.formField
+    );
     this.root.render(
       <LoginForm
-      buttonColor={this.buttonColor}
-      buttonSize={this.buttonSize}
-      dispatchEvent={(event:CustomEvent)=>this.dispatchEvent(event)}
-      formField={this.formField}
+        formName={this.formName}
+        buttonName={this.buttonName}
+        buttonPosition={this.buttonPosition}
+        buttonColor={this.buttonColor}
+        buttonSize={this.buttonSize}
+        dispatchEvent={(event: CustomEvent) => this.dispatchEvent(event)}
+        formField={this.formField}
       />
-    )
+    );
   }
 }
 customElements.define("custom-form", LoginWebComponent);

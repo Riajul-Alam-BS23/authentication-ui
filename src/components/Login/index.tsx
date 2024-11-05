@@ -1,1 +1,1 @@
-export {LoginWebComponent as CustomLogin} from './login.web-component';
+export { LoginWebComponent as CustomForm } from "./login.web-component";
