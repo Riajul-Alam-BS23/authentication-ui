@@ -1,6 +1,5 @@
-import  ReactDOM  ,{ Root } from "react-dom/client";
+import ReactDOM, { Root } from "react-dom/client";
 import { FormField, LoginForm } from "./login.components";
-
 
 class LoginWebComponent extends HTMLElement {
   private shadow: ShadowRoot;
@@ -11,6 +10,8 @@ class LoginWebComponent extends HTMLElement {
   private formName: string = "Login";
   private buttonName: string = "Login";
   private buttonPosition: string = "";
+  private rememberMe: boolean = false;
+
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
@@ -18,9 +19,10 @@ class LoginWebComponent extends HTMLElement {
     style.textContent = `
       @import 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
     `;
-    this.shadowRoot?.appendChild(style);
+    this.shadow.appendChild(style);
     this.root = null;
   }
+
   static get observedAttributes() {
     return [
       "button-color",
@@ -29,60 +31,54 @@ class LoginWebComponent extends HTMLElement {
       "form-name",
       "button-name",
       "button-position",
+      "remember-me",
     ];
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (oldValue != newValue) {
-      if (name === "button-size") {
-        this.buttonSize = newValue;
-      }
-      if (name === "button-color") {
-        this.buttonColor = newValue;
-      }
-      if (name === "form-field") {
-        this.formField = JSON.parse(newValue);
-      }
-      if (name === "form-name") {
-        this.formName = newValue;
-      }
-      if (name === "button-name") {
-        this.buttonName = newValue;
-      }
-      if (name === "button-position") {
-        this.buttonPosition = newValue;
+    if (oldValue !== newValue) {
+      switch (name) {
+        case "button-size":
+          this.buttonSize = newValue;
+          break;
+        case "button-color":
+          this.buttonColor = newValue;
+          break;
+        case "form-field":
+          this.formField = JSON.parse(newValue);
+          break;
+        case "form-name":
+          this.formName = newValue;
+          break;
+        case "button-name":
+          this.buttonName = newValue;
+          break;
+        case "button-position":
+          this.buttonPosition = newValue;
+          break;
+        case "remember-me":
+          this.rememberMe = newValue === "true";
+          break;
       }
     }
-    console.log(
-      "name=> ",
-      name,
-      "oldValue=> ",
-      oldValue,
-      "new Value=> ",
-      newValue
-    );
     this.render();
   }
+
   connectedCallback() {
     this.render();
   }
+
   disconnectedCallback() {
     if (this.root) {
       this.root.unmount();
     }
   }
+
   private render() {
     if (!this.root) {
       this.root = ReactDOM.createRoot(this.shadow!);
     }
-    console.log(
-      "button color=> ",
-      this.buttonColor,
-      "\n button size",
-      this.buttonSize,
-      "\n form field",
-      this.formField
-    );
+
     this.root.render(
       <LoginForm
         formName={this.formName}
@@ -90,11 +86,13 @@ class LoginWebComponent extends HTMLElement {
         buttonPosition={this.buttonPosition}
         buttonColor={this.buttonColor}
         buttonSize={this.buttonSize}
-        dispatchEvent={(event: CustomEvent) => this.dispatchEvent(event)}
+        rememberMe={this.rememberMe}
         formField={this.formField}
+        dispatchEvent={(event: CustomEvent) => this.dispatchEvent(event)}
       />
     );
   }
 }
+
 customElements.define("custom-form", LoginWebComponent);
 export { LoginWebComponent };

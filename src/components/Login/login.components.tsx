@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
@@ -21,6 +22,7 @@ interface LoginProps {
   buttonPosition: string;
   formField: FormField[];
   dispatchEvent: (event: CustomEvent) => void;
+  rememberMe?: boolean;
 }
 
 const LoginForm = ({
@@ -31,8 +33,10 @@ const LoginForm = ({
   buttonPosition,
   formField,
   dispatchEvent,
+  rememberMe = false,
 }: LoginProps) => {
   const [tooltipMessage, setTooltipMessage] = useState<string | null>(null);
+  const [isRemembered, setIsRemembered] = useState(false);
 
   const {
     register,
@@ -44,18 +48,17 @@ const LoginForm = ({
     reValidateMode: "onChange",
   });
 
-  const onSubmit = (
-    values: Record<string, string | number | boolean | null>
-  ) => {
+  const onSubmit = (values: Record<string, string | number | boolean | null>) => {
     try {
       const event = new CustomEvent("login-submit", {
-        detail: values,
+        detail: { ...values, rememberMe: isRemembered },
         bubbles: true,
         composed: true,
       });
       dispatchEvent(event);
       setTooltipMessage("Form submitted successfully!");
       reset();
+      setIsRemembered(false);
     } catch {
       setTooltipMessage("Submission failed. Please try again.");
     }
@@ -148,6 +151,25 @@ const LoginForm = ({
               )}
             </div>
           ))}
+
+          {rememberMe && (
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={isRemembered}
+                onChange={(e) => setIsRemembered(e.target.checked)}
+                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label
+                htmlFor="rememberMe"
+                className="ml-2 block text-sm text-gray-600"
+              >
+                Remember Me
+              </label>
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={!isValid || isSubmitting}

@@ -13,6 +13,7 @@ export default {
     buttonPosition: { control: "text" },
     formName: { control: "text" },
     formField: { control: "object" },
+    rememberMe: { control: "boolean" },
   },
 } as Meta;
 
@@ -27,6 +28,7 @@ const Template: StoryFn = (args: any) => {
     element.setAttribute("button-position", args.buttonPosition);
     element.setAttribute("form-name", args.formName);
     element.setAttribute("form-field", JSON.stringify(args.formField));
+    element.setAttribute("remember-me", args.rememberMe ? "true" : "false");
 
     container.current?.appendChild(element);
 
@@ -47,6 +49,7 @@ Default.args = {
   buttonSize: "px-6 py-3",
   buttonName: "Login",
   buttonPosition: "self-center",
+  rememberMe: true, 
   formField: [
     {
       fieldLabel: "Username",
@@ -78,6 +81,7 @@ CustomButtonStyle.args = {
   buttonSize: "px-8 py-4",
   buttonName: "Sign In",
   buttonPosition: "self-start",
+  rememberMe: true,
   formField: [
     {
       fieldLabel: "Email",
@@ -109,6 +113,7 @@ LargeForm.args = {
   buttonSize: "px-10 py-4",
   buttonName: "Register",
   buttonPosition: "self-end",
+  rememberMe: false,
   formField: [
     {
       fieldLabel: "Username",
